@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <xs:element name="LISTADOCUMENTOS" type="ListaDocumentosType"/>
+   <xs:complexType name="ListaDocumentosType">
+      <xs:sequence>
+         <xs:element name="DOCUMENTO" type="DocumentoType" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="DocumentoType">
+      <xs:sequence>
+         <xs:element name="RUN" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="DIGITO_VERIFICADOR" type="xs:string" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="TIPO_DOCUMENTO" type="TipoDocumentoType" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="NUMERO_DOCUMENTO" type="xs:string" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="FECHA_DOCUMENTO" type="FechaFormateadaType" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="SERVICIO_EMISOR" type="tipoIdObligatorio" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="DEPENDENCIA_EMISORA" type="tipoIdObligatorio" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="SERVICIO_DESTINO" type="tipoIdObligatorio" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DEPENDENCIA_DESTINO" type="tipoIdObligatorio" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="REGION_DESTINO" type="tipoIdObligatorio" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="COMUNA_DESTINO" type="tipoIdNoObligatorio" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="FECHA_DESDE" type="FechaFormateadaType" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="FECHA_HASTA" type="FechaFormateadaType" minOccurs="1" maxOccurs="1"/>
+         <xs:element name="MOTIVO_COMETIDO_FUNCIONARIO" type="MotivoCometidoFuncionarioType" minOccurs="1" maxOccurs="1"/>
+         <xs:choice>
+            <xs:element name="TIENE_BENEFICIOS" type="BeneficiosSiType" />
+            <xs:element name="NO_TIENE_BENEFICIOS" />
+         </xs:choice>
+         <xs:element name="MONTO" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+     </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="TipoDocumentoType">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="RESOLUCION EXENTA"/>
+         <xs:enumeration value="DECRETO EXENTO"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="FechaFormateadaType">
+      <xs:restriction base="xs:string">
+         <xs:pattern value="\d{2}[/]\d{2}[/]\d{4}"/>
+         <xs:length value="10"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="MotivoCometidoFuncionarioType">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="Visita Inspectiva o de Fiscalización"/>
+         <xs:enumeration value="Practicar Notificación(es)"/>
+         <xs:enumeration value="Reunión en otra dependencia del servicio"/>
+         <xs:enumeration value="Asistencia a Curso y/o actividad de capacitación"/>
+         <xs:enumeration value="Reunión fuera del servicio"/>
+         <xs:enumeration value="Concurrir a citación"/>
+         <xs:enumeration value="Otras"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="tipoIdObligatorio">
+       <xs:restriction base="xs:integer">
+         <xs:minInclusive value="0"/>
+       </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="tipoIdNoObligatorio">
+       <xs:restriction base="xs:integer">
+         <xs:minInclusive value="-1"/>
+       </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="BeneficiosSiType">
+      <xs:sequence>
+         <xs:element name="SELECCIONE_BENEFICIOS" type="SeleccioneBeneficiosType" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="SeleccioneBeneficiosType">
+      <xs:choice minOccurs="1" maxOccurs="4">
+         <xs:element name="PASAJE" type="xs:string"/>
+         <xs:element name="VIATICO" type="xs:string"/>
+         <xs:element name="ALOJAMIENTO" type="xs:string"/>
+         <xs:element name="OTROS" type="OtrosType"/>
+      </xs:choice>
+   </xs:complexType>
+   <xs:complexType name="OtrosType">
+      <xs:sequence>
+         <xs:element name="DETALLE_BENEFICIOS_PERIODO" minOccurs="1" maxOccurs="1">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:minLength value="1"/>                  
+                  <xs:maxLength value="255"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>
